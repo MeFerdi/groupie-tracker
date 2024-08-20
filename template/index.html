@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Locations</title>
+    <title>Location Details</title>
 </head>
 <body>
-    <h1>Locations</h1>
-    <ul>
-        {{range .Location}}
-            <li>
-                <strong>ID:</strong> {{.ID}}<br>
-                <strong>Locations:</strong> {{range .Locations}}{{.}} {{end}}<br>
-            </li>
-        {{end}}
-    </ul>
+    <h1>Location Details</h1>
+    <div>
+        <strong>ID:</strong> {{.ID}}<br>
+        <strong>Locations:</strong> 
+        {{range .Locations}}{{.}} {{end}}<br>
+    </div>
 </body>
 </html>
