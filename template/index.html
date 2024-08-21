@@ -11,6 +11,7 @@
                 <h2>{{.Name}}</h2>
                 <img src="{{.Image}}" alt="{{.Name}} image">
                 <p>First Album: {{.FirstAlbum}}</p>
+                <p>Creation Date: {{.CreationDate}}</p>
                 <p>Members: {{range .Members}}{{.}}, {{end}}</p>
             </li>
         {{end}}

@@ -8,11 +8,12 @@ import (
 )
 
 type Artist struct {
-	ID         string   `json:"id"`
-	Name       string   `json:"name"`
-	Image      string   `json:"image"`
-	FirstAlbum string   `json:"first_album"`
-	Members    []string `json:"members"`
+	ID           int      `json:"id"`
+	Name         string   `json:"name"`
+	Image        string   `json:"image"`
+	FirstAlbum   string   `json:"firstAlbum"`
+	Members      []string `json:"members"`
+	CreationDate int      `json:"creationDate"`
 }
 
 type Artists []Artist
