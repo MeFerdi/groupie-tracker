@@ -8,5 +8,5 @@ import (
 
 func main() {
 	http.HandleFunc("/", artistApi.ArtistHandler)
-	http.ListenAndServe(":3000", nil)
+	http.ListenAndServe(":8080", nil)
 }
