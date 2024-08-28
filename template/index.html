@@ -2,6 +2,9 @@
 <html>
 <head>
     <title>Artists</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/script/script.js"></script>
 </head>
 <body>
     <h1>Artists</h1>
@@ -10,9 +13,17 @@
             <li>
                 <h2>{{.Name}}</h2>
                 <img src="{{.Image}}" alt="{{.Name}} image">
-                <p>First Album: {{.FirstAlbum}}</p>
-                <p>Creation Date: {{.CreationDate}}</p>
-                <p>Members: {{range .Members}}{{.}}, {{end}}</p>
+                
+                <button class="dropdown-button" onclick="toggleDropdown(event)">Details</button>
+                <div class="dropdown-content">
+                    <p><strong>Members:</strong> {{range .Members}}{{.}}, {{end}}</p>
+                    <p><strong>Creation Date:</strong> {{.CreationDate}}</p>
+                    <p><strong>First Album:</strong> {{.FirstAlbum}}</p>
+                </div>
+                
+                <button class="nav-button" onclick="location.href='location.html'">Locations</button>
+                <button class="nav-button" onclick="location.href='dates.html'">Dates</button>
+                <button class="nav-button" onclick="location.href='relations.html'">Relation</button>
             </li>
         {{end}}
     </ul>
