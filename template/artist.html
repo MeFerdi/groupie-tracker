@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Name}} - Artist Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .artist {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .artist img {
+            max-width: 200px;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #333;
+        }
+        .details {
+            margin-top: 10px;
+        }
+        a {
+            color: blue;
+            text-decoration: underline;
+        }
+        .locations-link {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    {{if .}}
+        <div class="artist">
+            <h2>{{.Name}}</h2>
+            <img src="{{.Image}}" alt="{{.Name}} Image">
+            <div class="details">
+                <p><strong>Members:</strong> {{range .Members}}{{.}} {{end}}</p>
+                <p><strong>Creation Date:</strong> {{.CreationDate}}</p>
+                <p><strong>First Album:</strong> {{.FirstAlbum}}</p>
+                <p><strong>Locations:</strong> 
+                    {{if .ID}}
+                        <a href="/locations/{{.ID}}" class="locations-link">View Locations</a>
+                    {{else}}
+                        N/A
+                    {{end}}
+                </p>
+            </div>
+        </div>
+    {{else}}
+        <p>No artist information found.</p>
+    {{end}}
+</body>
+</html>
