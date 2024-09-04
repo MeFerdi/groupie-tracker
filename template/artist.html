@@ -55,6 +55,13 @@
                         N/A
                     {{end}}
                 </p>
+                <p><strong>Dates:</strong> 
+                    {{if .ID}}
+                        <a href="/dates/{{.ID}}" class="locations-link" name = "id" >View Dates</a>
+                    {{else}}
+                        N/A
+                    {{end}}
+                </p>
             </div>
         </div>
     {{else}}
