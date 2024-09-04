@@ -5,6 +5,11 @@ type Location struct {
 	Locations []string `json:"locations"`
 }
 
+type DateEntry struct {
+	ID        int64    `json:"id"`
+	Dates []string `json:"dates"`
+}
+
 type Artist struct {
 	ID           int      `json:"id"`
 	Image        string   `json:"image"`
