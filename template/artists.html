@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artists</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .artist {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .artist img {
+            max-width: 200px;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <h1>Artists</h1>
+    {{if .}}
+        {{range .}}
+            <a href="/artist/{{.ID}}">
+                <div class="artist">
+                    <h2>{{.Name}}</h2>
+                    <img src="{{.Image}}" alt="{{.Name}} Image">
+                </div>
+            </a>
+        {{end}}
+    {{else}}
+        <p>No artists found.</p>
+    {{end}}
+</body>
+</html>
