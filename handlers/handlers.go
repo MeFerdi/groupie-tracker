@@ -71,6 +71,13 @@ func LocationHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Wrong method", http.StatusMethodNotAllowed)
 		return 
 	}
+	id1 := strings.Split(r.URL.Path, "/")
+	if len(id1) < 3 {
+		http.Error(w, "Artist ID not found", http.StatusBadRequest)
+		return
+	}
+	id := id1[len(id1)-1]
+
 
 	temp1, err := template.ParseFiles("template/index.html")
 	if err != nil {
@@ -78,7 +85,7 @@ func LocationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	Result := ReadApi()
+	Result,_ := ReadLocation(id)
 
 	// Pass the result to the template
 	err = temp1.Execute(w, Result)
