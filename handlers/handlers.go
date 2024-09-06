@@ -69,7 +69,7 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 func LocationHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Wrong method", http.StatusMethodNotAllowed)
-		return 
+		return
 	}
 	id1 := strings.Split(r.URL.Path, "/")
 	if len(id1) < 3 {
@@ -78,14 +78,13 @@ func LocationHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	id := id1[len(id1)-1]
 
-
 	temp1, err := template.ParseFiles("template/index.html")
 	if err != nil {
 		http.Error(w, "Error loading template", http.StatusInternalServerError)
 		return
 	}
 
-	Result,_ := ReadLocation(id)
+	Result, _ := ReadLocation(id)
 
 	// Pass the result to the template
 	err = temp1.Execute(w, Result)
@@ -117,5 +116,29 @@ func DateHandler(w http.ResponseWriter, r *http.Request) {
 	err = temp1.Execute(w, Result)
 	if err != nil {
 		http.Error(w, "Error executing template", http.StatusInternalServerError)
+	}
+
+}
+func RelationsHandler(w http.ResponseWriter, r *http.Request) {
+	artistID := r.URL.Query().Get("id")
+	if artistID == "" {
+		http.Error(w, "Artist ID is required", http.StatusBadRequest)
+		return
+	}
+
+	pageData, err := getRelationData(artistID)
+	if err != nil {
+		http.Error(w, "Failed to get data", http.StatusInternalServerError)
+		return
+	}
+
+	tmpl, err := template.ParseFiles("templates/relation.html")
+	if err != nil {
+		http.Error(w, "Failed to load template", http.StatusInternalServerError)
+		return
+	}
+
+	if err := tmpl.Execute(w, pageData); err != nil {
+		http.Error(w, "Failed to render template", http.StatusInternalServerError)
 	}
 }
