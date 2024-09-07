@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log"
 	"net/http"
 	"strings"
 	"text/template"
@@ -14,6 +15,7 @@ func ArtistsHandler(w http.ResponseWriter, r *http.Request) {
 
 	temp1, err := template.ParseFiles("template/artists.html")
 	if err != nil {
+		log.Println("Error loading template:", err)
 		http.Error(w, "Error loading template", http.StatusInternalServerError)
 		return
 	}
@@ -78,7 +80,7 @@ func LocationHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	id := id1[len(id1)-1]
 
-	temp1, err := template.ParseFiles("template/index.html")
+	temp1, err := template.ParseFiles("template/locations.html")
 	if err != nil {
 		http.Error(w, "Error loading template", http.StatusInternalServerError)
 		return
@@ -120,11 +122,13 @@ func DateHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 func RelationsHandler(w http.ResponseWriter, r *http.Request) {
-	artistID := r.URL.Query().Get("id")
-	if artistID == "" {
-		http.Error(w, "Artist ID is required", http.StatusBadRequest)
+
+	idSegments := strings.Split(r.URL.Path, "/")
+	if len(idSegments) < 3 {
+		http.Error(w, "Artist ID not found", http.StatusBadRequest)
 		return
 	}
+	artistID := idSegments[len(idSegments)-1]
 
 	pageData, err := getRelationData(artistID)
 	if err != nil {
@@ -132,7 +136,7 @@ func RelationsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tmpl, err := template.ParseFiles("templates/relation.html")
+	tmpl, err := template.ParseFiles("template/relation.html")
 	if err != nil {
 		http.Error(w, "Failed to load template", http.StatusInternalServerError)
 		return

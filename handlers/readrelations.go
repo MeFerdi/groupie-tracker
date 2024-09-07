@@ -3,26 +3,27 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
-// type Artist struct {
-// 	Name       string   `json:"name"`
-// 	Image      string   `json:"image"`
-// 	Year       int      `json:"year"`
-// 	FirstAlbum string   `json:"firstAlbum"`
-// 	Members    []string `json:"members"`
-// }
+func fetchData(url string, target interface{}) error {
+	client := &http.Client{}
+	resp, err := client.Get(url)
+	if err != nil {
+		return fmt.Errorf("error fetching data from %s: %w", url, err)
+	}
+	defer resp.Body.Close()
 
-type Relation struct {
-	ArtistName string   `json:"artist_name"`
-	Locations  []string `json:"locations"`
-	Dates      []string `json:"dates"`
-}
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("failed to fetch data from %s: %s", url, resp.Status)
+	}
 
-type PageData struct {
-	Artist   Artist
-	Relation Relation
+	if err := json.NewDecoder(resp.Body).Decode(target); err != nil {
+		return fmt.Errorf("error decoding data from %s: %w", url, err)
+	}
+
+	return nil
 }
 
 func getRelationData(artistID string) (*PageData, error) {
@@ -32,27 +33,19 @@ func getRelationData(artistID string) (*PageData, error) {
 	var artist Artist
 	var relation Relation
 
-	// Fetch artist info
-	artistResp, err := http.Get(artistURL)
-	if err != nil {
-		return nil, err
-	}
-	defer artistResp.Body.Close()
-
-	if err := json.NewDecoder(artistResp.Body).Decode(&artist); err != nil {
+	// Fetch artist data
+	if err := fetchData(artistURL, &artist); err != nil {
 		return nil, err
 	}
 
-	// Fetch relation info
-	relationResp, err := http.Get(relationURL)
-	if err != nil {
+	// Fetch relation data
+	if err := fetchData(relationURL, &relation); err != nil {
 		return nil, err
 	}
-	defer relationResp.Body.Close()
 
-	if err := json.NewDecoder(relationResp.Body).Decode(&relation); err != nil {
-		return nil, err
-	}
+	// Debugging: Print the fetched data
+	log.Printf("Fetched artist data: %+v", artist)
+	log.Printf("Fetched relation data: %+v", relation)
 
 	return &PageData{Artist: artist, Relation: relation}, nil
 }

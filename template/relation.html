@@ -4,34 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{.Artist.Name}} - Relations</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+        h2 {
+            font-size: 1.8em;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto mt-8 p-4 bg-white shadow-lg">
-        <h1 class="text-4xl font-bold">{{.Artist.Name}}</h1>
-        <img src="{{.Artist.Image}}" alt="{{.Artist.Name}}" class="w-full h-auto mt-4">
-        <p class="mt-2">Year Active: {{.Artist.Year}}</p>
-        <p>First Album: {{.Artist.FirstAlbum}}</p>
-        <h2 class="text-2xl mt-6 font-semibold">Members</h2>
-        <ul class="list-disc ml-6">
-            {{range .Artist.Members}}
-                <li>{{.}}</li>
-            {{end}}
-        </ul>
-
-        <h2 class="text-2xl mt-6 font-semibold">Concert Locations</h2>
-        <ul class="list-disc ml-6">
-            {{range .Relation.Locations}}
-                <li>{{.}}</li>
-            {{end}}
-        </ul>
-
-        <h2 class="text-2xl mt-6 font-semibold">Concert Dates</h2>
-        <ul class="list-disc ml-6">
-            {{range .Relation.Dates}}
-                <li>{{.}}</li>
-            {{end}}
-        </ul>
+<body>
+    <div class="container">
+        <h1>{{.Artist.Name}}</h1>
+        <img src="{{.Artist.Image}}" alt="{{.Artist.Name}}">
+        <div>
+            <p><strong>Year Active:</strong> {{.Artist.Year}}</p>
+            <p><strong>First Album:</strong> {{.Artist.FirstAlbum}}</p>
+        </div>
+        <div>
+            <h2>Members</h2>
+            <ul>
+                {{range .Artist.Members}}
+                    <li>{{.}}</li>
+                {{else}}
+                    <li>No members available</li>
+                {{end}}
+            </ul>
+        </div>
+        <div>
+            <h2>Concert Locations</h2>
+            <ul>
+                {{range .Relation.Locations}}
+                    <li>{{.}}</li>
+                {{else}}
+                    <li>No locations available</li>
+                {{end}}
+            </ul>
+        </div>
+        <div>
+            <h2>Concert Dates</h2>
+            <ul>
+                {{range .Relation.Dates}}
+                    <li>{{.}}</li>
+                {{else}}
+                    <li>No dates available</li>
+                {{end}}
+            </ul>
+        </div>
     </div>
 </body>
 </html>

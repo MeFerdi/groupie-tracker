@@ -6,7 +6,7 @@ type Location struct {
 }
 
 type DateEntry struct {
-	ID        int64    `json:"id"`
+	ID    int64    `json:"id"`
 	Dates []string `json:"dates"`
 }
 
@@ -20,4 +20,13 @@ type Artist struct {
 	Locations    string   `json:"locations"`
 	ConcertDates string   `json:"concertDates"`
 	Relations    string   `json:"relations"`
+}
+type Relation struct {
+	Locations []string
+	Dates     []string
+}
+
+type PageData struct {
+	Artist   Artist
+	Relation Relation
 }
