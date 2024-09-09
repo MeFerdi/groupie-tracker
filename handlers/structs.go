@@ -4,12 +4,10 @@ type Location struct {
 	ID        int64    `json:"id"`
 	Locations []string `json:"locations"`
 }
-
 type DateEntry struct {
 	ID    int64    `json:"id"`
 	Dates []string `json:"dates"`
 }
-
 type Artist struct {
 	ID           int      `json:"id"`
 	Image        string   `json:"image"`
@@ -22,11 +20,6 @@ type Artist struct {
 	Relations    string   `json:"relations"`
 }
 type Relation struct {
-	Locations []string
-	Dates     []string
-}
-
-type PageData struct {
-	Artist   Artist
-	Relation Relation
+	ID        int64               `json:"id"`
+	Locations map[string][]string `json:"datesLocations"`
 }
