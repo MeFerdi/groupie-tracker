@@ -132,19 +132,40 @@ func DateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
 func RelationHandler(w http.ResponseWriter, r *http.Request) {
-	// Fetch relations data
-	relation, err := GetRelationsData()
-	if err != nil {
-		http.Error(w, "Failed to fetch relation data", http.StatusInternalServerError)
-		log.Println("Error fetching relations:", err)
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	// Render the template with the relation data
-	err = relationTemplate.Execute(w, relation)
+	// Extract the artist ID from the URL
+	id1 := strings.Split(r.URL.Path, "/")
+	if len(id1) < 3 {
+		http.Error(w, "ID not found", http.StatusBadRequest)
+		return
+	}
+	id := id1[len(id1)-1]
+
+	// Fetch the relations data
+	relations, err := FetchRelations(id)
 	if err != nil {
+		log.Printf("Error fetching relations data: %v", err)
+		http.Error(w, "Failed to fetch relations data", http.StatusInternalServerError)
+		return
+	}
+
+	// Check if relationTemplate is properly initialized
+	if relationTemplate == nil {
+		log.Println("Error: relationTemplate is nil")
+		http.Error(w, "Template is not initialized", http.StatusInternalServerError)
+		return
+	}
+
+	// Render the template with relations data
+	err = relationTemplate.Execute(w, relations)
+	if err != nil {
+		log.Printf("Error rendering template: %v", err)
 		http.Error(w, "Failed to render template", http.StatusInternalServerError)
-		log.Println("Error rendering template:", err)
 	}
 }

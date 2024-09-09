@@ -5,23 +5,19 @@ import (
 	"net/http"
 )
 
-func FetchData(url string, target interface{}) error {
-	resp, err := http.Get(url)
+func FetchRelations(id string) (Relation, error) {
+	// Make a GET request to the API endpoint for relation data
+	res, err := http.Get("https://groupietrackers.herokuapp.com/api/relation/" + id)
 	if err != nil {
-		return err
+		return Relation{}, err
 	}
-	defer resp.Body.Close()
+	defer res.Body.Close() // Ensure the response body is closed after the function returns
 
-	return json.NewDecoder(resp.Body).Decode(target)
-}
-
-func GetRelationsData() (*Relation, error) {
-	var relation Relation
-
-	err := FetchData("https://groupietrackers.herokuapp.com/api/relation", &relation)
-	if err != nil {
-		return nil, err
+	// Decode the JSON response into a RelationData struct
+	var data Relation
+	if err := json.NewDecoder(res.Body).Decode(&data); err != nil {
+		return Relation{}, err
 	}
 
-	return &relation, nil
+	return data, nil
 }
