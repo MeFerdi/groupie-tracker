@@ -4,13 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Date Details</title>
+    
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #369fbe;
+            font-size: 48px;
+            margin-bottom: 40px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #333;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            text-align: center;
+            font-size: 24px;
+        }
+    </style>
 </head>
 <body>
     <h1>Date Entries</h1>
     <ul>
-            <li>ID: {{.ID}}, Date:<br>
-                {{range .Dates}}{{.}}<br>{{end}}
-            </li>
+        <li>ID: {{.ID}}, Date:<br>
+            {{range .Dates}}{{.}}<br>{{end}}
+        </li>
     </ul>
 </body>
 </html>
