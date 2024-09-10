@@ -111,9 +111,14 @@ func DateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	Result, _ := ReadDate(id)
+	Result, err := ReadDate(id)
+	if err != nil {
+        http.Error(w, "Failed to fetch date entry: "+err.Error(), http.StatusInternalServerError)
+        return
+    }
 	err = temp1.Execute(w, Result)
 	if err != nil {
 		http.Error(w, "Error executing template", http.StatusInternalServerError)
 	}
 }
+
