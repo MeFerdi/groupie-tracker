@@ -40,6 +40,7 @@ func ArtistsHandler(w http.ResponseWriter, r *http.Request) {
 	// Pass the result to the template
 	err = temp1.Execute(w, result)
 	if err != nil {
+		log.Println("Error executing template:", err)
 		http.Error(w, "Error executing template", http.StatusInternalServerError)
 	}
 }
