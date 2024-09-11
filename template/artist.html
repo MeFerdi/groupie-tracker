@@ -4,64 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{.Name}} - Artist Details</title>
+    
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .artist {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        .artist img {
-            max-width: 200px;
-            border-radius: 5px;
-        }
-        h2 {
-            color: #333;
-        }
-        .details {
-            margin-top: 10px;
-        }
-        a {
-            color: blue;
-            text-decoration: underline;
-        }
-        .locations-link {
-            display: inline-block;
-            background-color: #007bff;
+            background-color: #1a1a1a;
             color: #fff;
-            padding: 5px 10px;
-            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .artist {
+            background-color: #333;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+            max-width: 1000px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            grid-gap: 40px;
+            align-items: center;
+        }
+
+        .artist img {
+            border-radius: 50%;
+            max-width: 100%;
+            width: 350px;
+            height: 350px;
+            object-fit: cover;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #369fbe;
+        }
+
+        .details {
+            display: flex;
+            flex-direction: column;
+            font-size: 24px;
+        }
+
+        .details p {
+            margin: 20px 0;
+        }
+
+        .details strong {
+            color: #369fbe;
+        }
+
+        .links a {
+            display: inline-block;
+            background-color: #369fbe;
+            color: #1a1a1a;
+            padding: 16px 24px;
+            border-radius: 8px;
             text-decoration: none;
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        .links a:hover {
+            background-color: #369fbe;
         }
     </style>
 </head>
 <body>
     {{if .}}
         <div class="artist">
-            <h2>{{.Name}}</h2>
             <img src="{{.Image}}" alt="{{.Name}} Image">
             <div class="details">
+                <h2>{{.Name}}</h2>
                 <p><strong>Members:</strong> {{range .Members}}{{.}} {{end}}</p>
                 <p><strong>Creation Date:</strong> {{.CreationDate}}</p>
                 <p><strong>First Album:</strong> {{.FirstAlbum}}</p>
-                <p><strong>Locations:</strong> 
-                    {{if .ID}}
-                        <a href="/locations/{{.ID}}" class="locations-link">View Locations</a>
-                    {{else}}
-                        N/A
-                    {{end}}
-                </p>
-                <p><strong>Dates:</strong> 
-                    {{if .ID}}
-                        <a href="/dates/{{.ID}}" name = "id" >View Dates</a>
-                    {{else}}
-                        N/A
-                    {{end}}
-                </p>
+
+                <div class="links">
+                    <p><strong>Locations:</strong> 
+                        {{if .ID}}
+                            <a href="/locations/{{.ID}}">View Locations</a>
+                        {{else}}
+                            N/A
+                        {{end}}
+                    </p>
+
+                    <p><strong>Dates:</strong> 
+                        {{if .ID}}
+                            <a href="/dates/{{.ID}}">View Dates</a>
+                        {{else}}
+                            N/A
+                        {{end}}
+                    </p>
+
+                    <p><strong>Relations:</strong> 
+                        {{if .ID}}
+                            <a href="/relation/{{.ID}}">View Relations</a>
+                        {{else}}
+                            N/A
+                        {{end}}
+                    </p>
+                </div>
             </div>
         </div>
     {{else}}
