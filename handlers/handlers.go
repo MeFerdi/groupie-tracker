@@ -72,6 +72,11 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if result.ID == 0 { 
+        http.NotFound(w, r) 
+        return
+    }
+
 	// Pass the result to the template
 	err = temp1.Execute(w, result)
 	if err != nil {
@@ -100,6 +105,7 @@ func LocationHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	Result, _ := ReadLocation(id)
+	
 
 	err = temp1.Execute(w, Result)
 	if err != nil {
@@ -128,6 +134,10 @@ func DateHandler(w http.ResponseWriter, r *http.Request) {
 	Result, err := ReadDate(id)
 	if err != nil {
         http.Error(w, "Failed to fetch date entry: "+err.Error(), http.StatusInternalServerError)
+        return
+    }
+	if Result.ID == 0 { 
+        http.NotFound(w, r) 
         return
     }
 	err = temp1.Execute(w, Result)
