@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relations</title>
+
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 40px;
+            min-height: 100vh;
+        }
+
+        header {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #369fbe;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .relation-card {
+            background-color: #333;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+            margin-bottom: 40px;
+        }
+
+        .relation-card h2 {
+            color: #369fbe;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+
+        .relation-card ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .relation-card ul li {
+            background-color: #444;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Relations</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            {{ range $location, $dates := .Locations }}
+                <div class="relation-card">
+                    <h2>{{ $location }}</h2>
+                    <ul>
+                        {{ range $dates }}
+                            <li>{{ . }}</li>
+                        {{ end }}
+                    </ul>
+                </div>
+            {{ end }}
+        </div>
+    </main>
+</body>
+</html>

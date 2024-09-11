@@ -10,7 +10,8 @@ func main() {
 	http.HandleFunc("/locations/", api.LocationHandler)
 	http.HandleFunc("/", api.ArtistsHandler)
 	http.HandleFunc("/artist/", api.ArtistHandler)
-
+	http.HandleFunc("/relation/", api.RelationHandler)
+	http.HandleFunc("/dates/", api.DateHandler)
 
 	http.ListenAndServe(":3000", nil)
 }
