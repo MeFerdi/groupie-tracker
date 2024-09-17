@@ -34,7 +34,25 @@ then use the following command to run
 go run .
 ```
 
-3. Access the website: open a web browser and navigate to  localhost:3000
+3. Access the website: open a web browser and navigate to  http://localhost:3000
+
+## Technologies Used
+
+    Go (Golang)
+    HTML/CSS
+    JavaScript for frontend
+
+## Demo project
+![Demo GIF](images/art.gif)
+
+
+## License
+
+This project is licensed under the terms of the [MIT License](./LICENSE).
+Contact Information
+
+For any questions or inquiries, feel free to reach out:
+    Email: apikojuma94@gmail.com
 
 ## Contribution
 * If you want to contribute to this project, feel free to open issues or pull requests. Any improvements, bug fixes, or features are welcome!
