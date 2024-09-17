@@ -6,8 +6,7 @@ import (
 	"net/http"
 )
 
-func ReadArtists() ([]Artist, error) {
-	url := "https://groupietrackers.herokuapp.com/api/artists"
+func ReadArtists(url string) ([]Artist, error) {
 	response, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -23,5 +22,6 @@ func ReadArtists() ([]Artist, error) {
 	} else {
 		return nil, fmt.Errorf("API returned status code: %d", response.StatusCode)
 	}
+
 	return artists, nil
 }
