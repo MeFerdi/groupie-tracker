@@ -58,6 +58,15 @@
             color: #1dbb52;
         }
 
+        .members-list {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .members-list li {
+            margin-bottom: 10px;
+        }
+
         .links a {
             display: inline-block;
             background-color: #1faf1a;
@@ -80,7 +89,12 @@
             <img src="{{.Image}}" alt="{{.Name}} Image">
             <div class="details">
                 <h2>{{.Name}}</h2>
-                <p><strong>Members:</strong> {{range .Members}}{{.}} {{end}}</p>
+                <p><strong>Members:</strong></p>
+                <ul class="members-list">
+                    {{range .Members}}
+                        <li>{{.}}</li>
+                    {{end}}
+                </ul>
                 <p><strong>Creation Date:</strong> {{.CreationDate}}</p>
                 <p><strong>First Album:</strong> {{.FirstAlbum}}</p>
 
