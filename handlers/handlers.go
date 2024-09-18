@@ -3,17 +3,27 @@ package api
 import (
 	"log"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"text/template"
 )
 
 var errorTemplate *template.Template
 
-func init() {
+func Init() {
 	var err error
-	errorTemplate, err = template.ParseFiles("template/error.html")
+	templatePath := filepath.Join("template", "error.html")
+
+	errorTemplate, err = template.ParseFiles(templatePath)
 	if err != nil {
-		log.Fatal("Error parsing error template:", err)
+		//log.Printf("Warning: Error parsing error template: %v", err)
+		// Create a simple fallback template
+		errorTemplate, _ = template.New("error").Parse(`
+            <html><body>
+            <h1>Error {{.Code}}</h1>
+            <p>{{.Message}}</p>
+            </body></html>
+        `)
 	}
 }
 
@@ -66,13 +76,14 @@ func ArtistsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	temp1, err := template.ParseFiles("template/artists.html")
+	templatePath := filepath.Join("template", "artists.html")
+	temp1, err := template.ParseFiles(templatePath)
 	if err != nil {
 		renderError(w, http.StatusInternalServerError, "Error loading template")
 		return
 	}
 
-	result, err := ReadArtists()
+	result, err := ReadArtists("https://groupietrackers.herokuapp.com/api/artists")
 	if err != nil {
 		renderError(w, http.StatusInternalServerError, "Error fetching artists")
 		return
@@ -106,8 +117,9 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 		renderError(w, http.StatusInternalServerError, "Error loading template")
 		return
 	}
+	baseURL := "https://groupietrackers.herokuapp.com/api/artists/"
 
-	result, err := ReadArtist(id)
+	result, err := ReadArtist(baseURL, id)
 	if err != nil {
 		if strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "cannot unmarshal") {
 			renderError(w, http.StatusNotFound, "Artist not found")
@@ -146,8 +158,9 @@ func LocationHandler(w http.ResponseWriter, r *http.Request) {
 		renderError(w, http.StatusInternalServerError, "Error loading template")
 		return
 	}
+	url := "https://groupietrackers.herokuapp.com/api/locations/"
 
-	Result, err := ReadLocation(id)
+	Result, err := ReadLocation(url, id)
 	if err != nil {
 		if strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "cannot unmarshal") {
 			renderError(w, http.StatusNotFound, "Location not found")
@@ -173,17 +186,18 @@ func DateHandler(w http.ResponseWriter, r *http.Request) {
 		renderError(w, http.StatusMethodNotAllowed, "Wrong method")
 		return
 	}
-	if !strings.HasPrefix(r.URL.Path, "/dates/") || len(strings.Split(r.URL.Path, "/")) != 3 {
+
+	parts := strings.Split(r.URL.Path, "/")
+	if len(parts) != 3 || parts[1] != "dates" {
 		renderError(w, http.StatusNotFound, "Page Not Found")
 		return
 	}
 
-	id1 := strings.Split(r.URL.Path, "/")
-	if len(id1) < 3 {
+	id := parts[2]
+	if id == "" {
 		renderError(w, http.StatusBadRequest, "Artist ID not found")
 		return
 	}
-	id := id1[len(id1)-1]
 
 	temp1, err := template.ParseFiles("template/dates.html")
 	if err != nil {
@@ -191,7 +205,8 @@ func DateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	Result, err := ReadDate(id)
+	baseURL := "https://groupietrackers.herokuapp.com/api/dates/"
+	Result, err := ReadDate(baseURL, id)
 	if err != nil {
 		if strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "cannot unmarshal") {
 			renderError(w, http.StatusNotFound, "Date entry not found")
@@ -234,8 +249,9 @@ func RelationHandler(w http.ResponseWriter, r *http.Request) {
 		renderError(w, http.StatusInternalServerError, "Error loading template: "+err.Error())
 		return
 	}
+	base := "https://groupietrackers.herokuapp.com/api/relation/"
 
-	relations, err := FetchRelations(id)
+	relations, err := FetchRelations(base, id)
 	if err != nil {
 		if strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "cannot unmarshal") {
 			renderError(w, http.StatusNotFound, "Relation not found")
@@ -255,3 +271,4 @@ func RelationHandler(w http.ResponseWriter, r *http.Request) {
 		renderError(w, http.StatusInternalServerError, "Failed to render template: "+err.Error())
 	}
 }
+

@@ -6,10 +6,9 @@ import (
 	"net/http"
 )
 
-func ReadLocation(id string) (Location, error) {
-	url := "https://groupietrackers.herokuapp.com/api/locations/"
-	url = fmt.Sprintf("%s%s", url, id)
-	response, err := http.Get(url)
+func ReadLocation(baseURL,id string) (Location, error) {
+	baseURL = fmt.Sprintf("%s%s", baseURL, id)
+	response, err := http.Get(baseURL)
 	if err != nil {
 		return Location{}, err
 	}
