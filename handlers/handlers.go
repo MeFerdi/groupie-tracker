@@ -41,8 +41,37 @@ func renderError(w http.ResponseWriter, status int, message string) {
         log.Printf("Error rendering error template: %v", err)
     }
 }
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		renderError(w, http.StatusNotFound, "Page Not Found")
+		return
+	}
+
+	if r.Method != http.MethodGet {
+		renderError(w, http.StatusMethodNotAllowed, "Wrong method")
+		return
+	}
+
+	// Parse the homepage template
+	temp, err := template.ParseFiles("template/home.html") // Ensure you have home.html in the template directory
+	if err != nil {
+		renderError(w, http.StatusInternalServerError, "Error loading template")
+		return
+	}
+
+	// Execute the template and write to the response
+	err = temp.Execute(w, nil) // No data is passed to the homepage template
+	if err != nil {
+		renderError(w, http.StatusInternalServerError, "Error executing template")
+	}
+}
 
 func ArtistsHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/artists/" {
+		renderError(w, http.StatusNotFound, "Page Not Found")
+		return
+	}
+
 	if r.Method != http.MethodGet {
 		renderError(w, http.StatusMethodNotAllowed, "Wrong method")
 		return
