@@ -6,9 +6,8 @@ import (
 	"net/http"
 )
 
-func ReadDate(id string) (DateEntry, error) {
-	url := "https://groupietrackers.herokuapp.com/api/dates/"
-	url = fmt.Sprintf("%s%s", url, id)
+func ReadDate(baseURL, id string) (DateEntry, error) {
+	url := fmt.Sprintf("%s%s", baseURL, id)
 	response, err := http.Get(url)
 	if err != nil {
 		return DateEntry{}, err

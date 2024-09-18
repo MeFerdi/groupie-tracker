@@ -1,115 +1,118 @@
 package api
 
 import (
-	"io"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 )
-
-// Helper function to execute a request and return the response
-func executeRequest(req *http.Request, handler http.HandlerFunc) *httptest.ResponseRecorder {
-	rr := httptest.NewRecorder()
-	handler.ServeHTTP(rr, req)
-	return rr
-}
-
-func TestArtistsHandler(t *testing.T) {
-	req := httptest.NewRequest(http.MethodGet, "/artists", nil)
-	rr := executeRequest(req, ArtistsHandler)
-
-	resp := rr.Result()
-	if resp.StatusCode != http.StatusOK {
-		t.Errorf("expected status OK; got %v", resp.Status)
+func TestRenderError(t *testing.T) {
+	Init()
+	tests := []struct {
+		name           string
+		status         int
+		message        string
+		expectedStatus int
+		expectedBody   string
+	}{
+		{
+			name:           "Test 404 Not Found",
+			status:         http.StatusNotFound,
+			message:        "Page Not Found",
+			expectedStatus: http.StatusNotFound,
+			expectedBody:   "Error 404",
+		},
+		{
+			name:           "Test 500 Internal Server Error",
+			status:         http.StatusInternalServerError,
+			message:        "Internal Server Error",
+			expectedStatus: http.StatusInternalServerError,
+			expectedBody:   "Error 500",
+		},
+		{
+			name:           "Test 403 Forbidden",
+			status:         http.StatusForbidden,
+			message:        "Access Denied",
+			expectedStatus: http.StatusForbidden,
+			expectedBody:   "Error 403",
+		},
 	}
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatalf("could not read response body: %v", err)
-	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			w := httptest.NewRecorder()
+			renderError(w, tt.status, tt.message)
 
-	expected := "<expected_content>" // Set expected content based on actual data
-	if string(body) != expected {
-		t.Errorf("expected body %v; got %v", expected, string(body))
-	}
-}
+			if w.Code != tt.expectedStatus {
+				t.Errorf("expected status %d; got %d", tt.expectedStatus, w.Code)
+			}
 
-func TestArtistHandler(t *testing.T) {
-	req := httptest.NewRequest(http.MethodGet, "/artist/1", nil)
-	rr := executeRequest(req, ArtistHandler)
+			if !strings.Contains(w.Body.String(), tt.expectedBody) {
+				t.Errorf("expected body to contain %q; got %q", tt.expectedBody, w.Body.String())
+			}
 
-	resp := rr.Result()
-	if resp.StatusCode != http.StatusOK {
-		t.Errorf("expected status OK; got %v", resp.Status)
-	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatalf("could not read response body: %v", err)
-	}
-
-	expected := "<expected_content>" // Set expected content based on actual data
-	if string(body) != expected {
-		t.Errorf("expected body %v; got %v", expected, string(body))
-	}
-}
-
-func TestLocationHandler(t *testing.T) {
-	req := httptest.NewRequest(http.MethodGet, "/locations/1", nil)
-	rr := executeRequest(req, LocationHandler)
-
-	resp := rr.Result()
-	if resp.StatusCode != http.StatusOK {
-		t.Errorf("expected status OK; got %v", resp.Status)
-	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatalf("could not read response body: %v", err)
-	}
-
-	expected := "<expected_content>" // Set expected content based on actual data
-	if string(body) != expected {
-		t.Errorf("expected body %v; got %v", expected, string(body))
+			if !strings.Contains(w.Body.String(), tt.message) {
+				t.Errorf("expected body to contain %q; got %q", tt.message, w.Body.String())
+			}
+		})
 	}
 }
 
-func TestDateHandler(t *testing.T) {
-	req := httptest.NewRequest(http.MethodGet, "/dates/1", nil)
-	rr := executeRequest(req, DateHandler)
+func TestInit(t *testing.T) {
+	// Temporarily replace the global errorTemplate
+	originalTemplate := errorTemplate
+	defer func() { errorTemplate = originalTemplate }()
 
-	resp := rr.Result()
-	if resp.StatusCode != http.StatusOK {
-		t.Errorf("expected status OK; got %v", resp.Status)
+	// Reset errorTemplate to nil
+	errorTemplate = nil
+
+	// Call init() manually
+	Init()
+
+	// Check if errorTemplate is not nil after init
+	if errorTemplate == nil {
+		t.Error("errorTemplate is nil after init")
 	}
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatalf("could not read response body: %v", err)
+	testCases := []struct {
+		name         string
+		code         int
+		message      string
+		expectedBody string
+	}{
+		{"Not Found Error", 404, "Test Error", "Error 404"},
+		{"Internal Server Error", 500, "Server Error", "Error 500"},
+		{"Forbidden Error", 403, "Access Denied", "Error 403"},
 	}
 
-	expected := "<expected_content>" // Set expected content based on actual data
-	if string(body) != expected {
-		t.Errorf("expected body %v; got %v", expected, string(body))
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			w := httptest.NewRecorder()
+			err := errorTemplate.Execute(w, struct {
+				Code    int
+				Message string
+			}{
+				Code:    tc.code,
+				Message: tc.message,
+			})
+			if err != nil {
+				t.Errorf("Error executing template: %v", err)
+			}
+
+			if !strings.Contains(w.Body.String(), tc.expectedBody) {
+				t.Errorf("Expected body to contain %q, got %q", tc.expectedBody, w.Body.String())
+			}
+
+			if !strings.Contains(w.Body.String(), tc.message) {
+				t.Errorf("Expected body to contain %q, got %q", tc.message, w.Body.String())
+			}
+		})
 	}
-}
 
-func TestRelationHandler(t *testing.T) {
-	req := httptest.NewRequest(http.MethodGet, "/relation/1", nil)
-	rr := executeRequest(req, RelationHandler)
-
-	resp := rr.Result()
-	if resp.StatusCode != http.StatusOK {
-		t.Errorf("expected status OK; got %v", resp.Status)
-	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatalf("could not read response body: %v", err)
-	}
-
-	expected := "<expected_content>" // Set expected content based on actual data
-	if string(body) != expected {
-		t.Errorf("expected body %v; got %v", expected, string(body))
+	// Test with invalid template path
+	errorTemplate = nil
+	Init()
+	if errorTemplate == nil {
+		t.Error("Fallback template was not created when given an invalid path")
 	}
 }

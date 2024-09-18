@@ -1,43 +1,68 @@
 package api
 
 import (
-	"reflect"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 )
 
 func TestReadDate(t *testing.T) {
-	type args struct {
-		id string
-	}
+	baseURL := "https://groupietrackers.herokuapp.com/api/dates/"
 	tests := []struct {
-		name    string
-		args    args
-		want    DateEntry
-		wantErr bool
+		name           string
+		id             string
+		mockResponse   string
+		mockStatusCode int
+		wantErr        bool
 	}{
 		{
-			name:    "Successful case",
-			args:    args{id: "1"},
-			want:    DateEntry{ID: 1, Dates: []string{"*23-08-2019", "*22-08-2019", "*20-08-2019", "*26-01-2020", "*28-01-2020", "*30-01-2019", "*07-02-2020", "*10-02-2020"}},
-			wantErr: false,
+			name:           "Successful case",
+			id:             "1",
+			mockResponse:   `{"id": 1, "dates": ["2019-01-01", "2019-01-02"]}`,
+			mockStatusCode: http.StatusOK,
+			wantErr:        false,
 		},
 		{
-			name:    "API returns error status",
-			args:    args{id: "404"},
-			want:    DateEntry{},
-			wantErr: false,
+			name:           "API error",
+			id:             "999",
+			mockResponse:   ``,
+			mockStatusCode: http.StatusNotFound,
+			wantErr:        true,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ReadDate(tt.args.id)
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(tt.mockStatusCode)
+				w.Write([]byte(tt.mockResponse))
+			}))
+			defer server.Close()
+
+			// Replace the API URL with our mock server URL
+			origURL := baseURL
+			baseURL = server.URL + "/"
+			got, err := ReadDate(baseURL,tt.id)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ReadDate() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ReadDate() = %v, want %v", got, tt.want)
+
+			if !tt.wantErr {
+				if got.ID != 1 {
+					t.Errorf("ReadDate() got ID = %v, want %v", got.ID, 1)
+				}
+				if len(got.Dates) != 2 {
+					t.Errorf("ReadDate() got %v dates, want %v", len(got.Dates), 2)
+				}
 			}
+			fmt.Println(got.Dates)
+
+			// Restore the original URL
+			baseURL = origURL
 		})
 	}
 }
+
+
