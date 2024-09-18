@@ -11,38 +11,63 @@ import (
 var errorTemplate *template.Template
 
 func Init() {
-	var err error
-	templatePath := filepath.Join("template", "error.html")
-
-	errorTemplate, err = template.ParseFiles(templatePath)
-	if err != nil {
-		//log.Printf("Warning: Error parsing error template: %v", err)
-		// Create a simple fallback template
-		errorTemplate, _ = template.New("error").Parse(`
+    var err error
+    errorTemplate, err = template.ParseFiles("template/error.html")
+    if err != nil {
+       // log.Printf("Warning: Error parsing error template: %v", err)
+        // Create a simple fallback template
+        errorTemplate = template.Must(template.New("error").Parse(`
             <html><body>
             <h1>Error {{.Code}}</h1>
             <p>{{.Message}}</p>
             </body></html>
-        `)
-	}
+        `))
+      //  log.Println("Error parsing, using fallback template")
+		
+    }
 }
 
 func renderError(w http.ResponseWriter, status int, message string) {
-	w.WriteHeader(status)
-	err := errorTemplate.Execute(w, struct {
-		Code    int
-		Message string
-	}{
-		Code:    status,
-		Message: message,
-	})
+	Init()
+    w.WriteHeader(status)
+    err := errorTemplate.Execute(w, struct {
+        Code    int
+        Message string
+    }{
+        Code:    status,
+        Message: message,
+    })
+    if err != nil {
+        log.Printf("Error rendering error template: %v", err)
+    }
+}
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		renderError(w, http.StatusNotFound, "Page Not Found")
+		return
+	}
+
+	if r.Method != http.MethodGet {
+		renderError(w, http.StatusMethodNotAllowed, "Wrong method")
+		return
+	}
+
+	// Parse the homepage template
+	temp, err := template.ParseFiles("template/home.html") // Ensure you have home.html in the template directory
 	if err != nil {
-		log.Printf("Error rendering error template: %v", err)
+		renderError(w, http.StatusInternalServerError, "Error loading template")
+		return
+	}
+
+	// Execute the template and write to the response
+	err = temp.Execute(w, nil) // No data is passed to the homepage template
+	if err != nil {
+		renderError(w, http.StatusInternalServerError, "Error executing template")
 	}
 }
 
 func ArtistsHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
+	if r.URL.Path != "/artists/" {
 		renderError(w, http.StatusNotFound, "Page Not Found")
 		return
 	}
@@ -225,9 +250,9 @@ func RelationHandler(w http.ResponseWriter, r *http.Request) {
 		renderError(w, http.StatusInternalServerError, "Error loading template: "+err.Error())
 		return
 	}
-	base := "https://groupietrackers.herokuapp.com/api/relation/"
+	baseURL := "https://groupietrackers.herokuapp.com/api/relation/"
 
-	relations, err := FetchRelations(base, id)
+	relations, err := FetchRelations(baseURL, id)
 	if err != nil {
 		if strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "cannot unmarshal") {
 			renderError(w, http.StatusNotFound, "Relation not found")

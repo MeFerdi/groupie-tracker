@@ -24,7 +24,7 @@
 
         h1 {
             font-size: 48px;
-            color: #369fbe;
+            color: #17a12e;
         }
 
         .container {
@@ -41,7 +41,7 @@
         }
 
         .relation-card h2 {
-            color: #369fbe;
+            color: #38aa22;
             margin-bottom: 20px;
             font-size: 32px;
         }
@@ -75,8 +75,14 @@
                     <ul>
                         {{ range $dates }}
                             <li>{{ . }}</li>
+                        {{ else }}
+                            <li>No dates available</li>
                         {{ end }}
                     </ul>
+                </div>
+            {{ else }}
+                <div class="relation-card">
+                    <h2>No locations available</h2>
                 </div>
             {{ end }}
         </div>
