@@ -1,4 +1,5 @@
 # GROUPIE TRACKER
+![](https://www.globallogic.com/wp-content/uploads/2021/11/1024-Develop-Restful-API-using-Go-and-Gin.jpg)
 Groupie Trackers consists on receiving a given API and manipulate the data contained in it, in order to create a site, displaying the information.
 
 ## API Structure
