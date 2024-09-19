@@ -6,15 +6,20 @@ import (
 	"net/http"
 )
 
-func FetchRelations(baseURL, id string) (Relation, error) {
-	// Make a GET request to the API endpoint for relation data
+/*
+ReadRelations fetches relation data for a specific artist from the API.
+It takes a baseURL and an id as parameters and returns a Relation struct.
+The function sends a GET request to the specified URL and decodes the JSON response.
+If successful and the relation is found, it returns the Relation.
+Otherwise, it returns an error indicating either API issues or relation not found.
+*/
+func ReadRelations(baseURL, id string) (Relation, error) {
 	res, err := http.Get(baseURL + id)
 	if err != nil {
 		return Relation{}, err
 	}
-	defer res.Body.Close() // Ensure the response body is closed after the function returns
+	defer res.Body.Close()
 
-	// Decode the JSON response into a RelationData struct
 	var data Relation
 	if err := json.NewDecoder(res.Body).Decode(&data); err != nil {
 		return Relation{}, err
