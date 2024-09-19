@@ -390,7 +390,7 @@ func TestDateHandler(t *testing.T) {
 }
 
 // Mock function for FetchRelations for testing purposes
-var FetchRelationsFunc = FetchRelations
+var FetchRelationsFunc = ReadRelations
 
 func MockFetchRelations(baseURL, id string) (Relation, error) {
 	if id == "1" {
@@ -465,7 +465,7 @@ func TestRelationHandler(t *testing.T) {
 
 	// Replace FetchRelationsFunc with mock function and restore afterward
 	FetchRelationsFunc = MockFetchRelations
-	defer func() { FetchRelationsFunc = FetchRelations }()
+	defer func() { FetchRelationsFunc = ReadRelations }()
 
 	for _, test := range tests {
 		req := httptest.NewRequest(test.method, test.url, nil)

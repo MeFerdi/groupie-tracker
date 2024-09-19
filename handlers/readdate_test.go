@@ -43,7 +43,7 @@ func TestReadDate(t *testing.T) {
 			// Replace the API URL with our mock server URL
 			origURL := baseURL
 			baseURL = server.URL + "/"
-			got, err := ReadDate(baseURL,tt.id)
+			got, err := ReadDate(baseURL, tt.id)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ReadDate() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -64,5 +64,3 @@ func TestReadDate(t *testing.T) {
 		})
 	}
 }
-
-

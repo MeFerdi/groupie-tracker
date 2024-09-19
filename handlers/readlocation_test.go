@@ -11,7 +11,7 @@ func TestReadLocation(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/1" {
 			w.WriteHeader(http.StatusOK)
-            w.Write([]byte(`{"id":1,"locations":["north_carolina-usa","georgia-usa","los_angeles-usa","saitama-japan","osaka-japan","nagoya-japan","penrose-new_zealand","dunedin-new_zealand"]}`))
+			w.Write([]byte(`{"id":1,"locations":["north_carolina-usa","georgia-usa","los_angeles-usa","saitama-japan","osaka-japan","nagoya-japan","penrose-new_zealand","dunedin-new_zealand"]}`))
 		} else {
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -29,7 +29,7 @@ func TestReadLocation(t *testing.T) {
 			name:          "Valid location",
 			id:            "1",
 			wantID:        1,
-            wantLocations: []string{"north_carolina-usa", "georgia-usa", "los_angeles-usa", "saitama-japan", "osaka-japan", "nagoya-japan", "penrose-new_zealand", "dunedin-new_zealand"},
+			wantLocations: []string{"north_carolina-usa", "georgia-usa", "los_angeles-usa", "saitama-japan", "osaka-japan", "nagoya-japan", "penrose-new_zealand", "dunedin-new_zealand"},
 			wantErr:       false,
 		},
 		{
