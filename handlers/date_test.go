@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -43,7 +42,7 @@ func TestReadDate(t *testing.T) {
 			// Replace the API URL with our mock server URL
 			origURL := baseURL
 			baseURL = server.URL + "/"
-			got, err := ReadDate(baseURL,tt.id)
+			got, err := ReadDate(baseURL, tt.id)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ReadDate() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -57,12 +56,10 @@ func TestReadDate(t *testing.T) {
 					t.Errorf("ReadDate() got %v dates, want %v", len(got.Dates), 2)
 				}
 			}
-			fmt.Println(got.Dates)
+			// fmt.Println(got.Dates)
 
 			// Restore the original URL
 			baseURL = origURL
 		})
 	}
 }
-
-
