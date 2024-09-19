@@ -6,7 +6,13 @@ import (
 	"net/http"
 )
 
-func ReadLocation(baseURL,id string) (Location, error) {
+/*
+ReadLocation fetches location information from the API.
+It takes a baseURL and an id as parameters and returns a Location struct.
+The function sends a GET request to the specified URL and decodes the JSON response.
+If successful, it returns the Location. Otherwise, it returns an error.
+*/
+func ReadLocation(baseURL, id string) (Location, error) {
 	baseURL = fmt.Sprintf("%s%s", baseURL, id)
 	response, err := http.Get(baseURL)
 	if err != nil {

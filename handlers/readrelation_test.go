@@ -39,7 +39,7 @@ func TestFetchRelations(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := FetchRelations(server.URL+"/", tt.id)
+			got, err := ReadRelations(server.URL+"/", tt.id)
 
 			if (err != nil) != tt.wantErr {
 				t.Errorf("FetchRelations() error = %v, wantErr %v", err, tt.wantErr)
