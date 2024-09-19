@@ -45,7 +45,8 @@ go run .
 
 ## Demo project
 ![Demo GIF](images/art.gif)
-[View the GIF](images/art.gif)
+
+[Watch the Gif Here!](https://imgur.com/a/A9R65Lm)
 
 
 ## License
@@ -56,11 +57,11 @@ Contact Information
 * For any questions or inquiries, feel free to reach out:
     Email: apikojuma94@gmail.com
 ## Contributers
-- [hanapiko](https://learn.zone01kisumu.ke/git/hanapiko)
+- [hanapiko](https://github.com/hanapiko)
 
-- [hokwach](https://learn.zone01kisumu.ke/git/hokwach)
+- [hezronokwach](https://github.com/hezronokwach)
 
-- [ferdyodhiambo](https://learn.zone01kisumu.ke/git/ferdyodhiambo)
+- [MeFerdi](https://github.com/MeFerdi)
 
 
 ## Contribution
