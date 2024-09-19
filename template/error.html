@@ -14,13 +14,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
         }
 
         .container {
             background-color: #333;
             padding: 40px;
-            margin-top: 20px;
             width: 80%;
             max-width: 800px;
             border-radius: 12px;
@@ -33,6 +33,8 @@
             font-size: 48px;
             margin-bottom: 20px;
             background: linear-gradient(90deg, #369fbe, #34d399);
+            /* -webkit-background-clip: text; */
+            -webkit-text-fill-color: transparent;
         }
 
         .error-code {
@@ -41,43 +43,99 @@
             margin: 20px 0;
         }
 
-       .error-message {
-    font-size: 36px;
-    font-weight: bold;
-    margin-bottom: 30px;
-}
+        .error-message {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
 
         .nav-button {
             cursor: pointer;
             border: none;
-            background-color: #25af48;
-            color: #1a1a1a;
+            background-color: #144736;
+            color: #d5ddd5;
             padding: 16px 24px;
             text-align: center;
             text-decoration: none;
-            display: inline-block;
             font-size: 20px;
-            margin: 4px 2px;
             border-radius: 8px;
+            margin-top: 20px;
         }
+
         .error-image {
-    max-width: 50%;
-    height: auto;
-    margin-bottom: 20px;
-}
+            max-width: 50%;
+            height: auto;
+            margin-bottom: 20px;
+        }
 
         .nav-button:hover {
             opacity: 0.8;
         }
+
+        /* Center the Back button */
+        .back-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .error-code {
+                font-size: 56px;
+            }
+
+            .error-message {
+                font-size: 28px;
+            }
+
+            .nav-button {
+                font-size: 18px;
+                padding: 14px 20px;
+            }
+
+            .error-image {
+                max-width: 70%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            .error-code {
+                font-size: 48px;
+            }
+
+            .error-message {
+                font-size: 24px;
+            }
+
+            .nav-button {
+                font-size: 16px;
+                padding: 12px 18px;
+            }
+
+            .error-image {
+                max-width: 90%;
+            }
+        }
     </style>
 </head>
 <body>
-       <div class="container">
+    <div class="container">
         <h1>ERROR</h1>
         <img src="/images/3.jpg" alt="Error Illustration" class="error-image">
         <div class="error-code">{{.Code}}</div>
         <div class="error-message">{{.Message}}</div>
-        <button class="nav-button" onclick="window.history.back()">Go Back</button>
+        <div class="back-button-container">
+            <button class="nav-button" onclick="window.history.back()">← Back</button>
+        </div>
     </div>
 </body>
 </html>

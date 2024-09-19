@@ -16,6 +16,7 @@
             justify-content: flex-start;
             padding: 40px;
             min-height: 100vh;
+            margin: 0;
         }
 
         header {
@@ -25,6 +26,7 @@
         h1 {
             font-size: 48px;
             color: #17a12e;
+            text-align: center;
         }
 
         .container {
@@ -58,6 +60,61 @@
             border-radius: 8px;
             font-size: 24px;
         }
+
+        /* Back button style */
+        .back-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .back-button {
+            background-color: #144736;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #25af25;
+        }
+
+        /* Media query for responsive design */
+        @media (max-width: 768px) {
+            .relation-card {
+                padding: 30px;
+            }
+
+            .relation-card ul li {
+                font-size: 20px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .relation-card {
+                padding: 20px;
+            }
+
+            .relation-card ul li {
+                font-size: 18px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .back-button {
+                font-size: 16px;
+                padding: 8px 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -85,6 +142,11 @@
                     <h2>No locations available</h2>
                 </div>
             {{ end }}
+            
+            
+            <div class="back-button-container">
+                <button class="back-button" onclick="history.back()">← Back</button>
+            </div>
         </div>
     </main>
 </body>

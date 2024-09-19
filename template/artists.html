@@ -27,7 +27,7 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             color: #18ce21;
-          
+            text-align: center;
         }
 
         .artists-container {
@@ -71,7 +71,6 @@
             margin: 0;
             color: #20a820;
             text-transform: uppercase;
-          
         }
 
         .artist:hover {
@@ -107,6 +106,43 @@
             background-color: #2c641e;
             border-radius: 20px;
             border: 3px solid #1a1a1a;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .artist {
+                width: 250px;
+                height: 250px;
+            }
+            h1 {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .artist {
+                width: 200px;
+                height: 200px;
+            }
+            h1 {
+                font-size: 32px;
+                margin: 30px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .artist {
+                width: 150px;
+                height: 150px;
+            }
+            h1 {
+                font-size: 24px;
+                margin: 20px 0;
+            }
+
+            .artist h2 {
+                font-size: 16px;
+            }
         }
     </style>
 </head>

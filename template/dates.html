@@ -15,12 +15,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
         }
 
         .container {
             padding: 40px;
-            margin-top: 20px; /* Move content down from the top */
             width: 80%;
             max-width: 800px;
         }
@@ -46,16 +46,76 @@
             text-align: center;
             font-size: 24px;
         }
+
+        /* Back button style */
+        .back-button {
+            display: inline-block;
+            background-color: #144736;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #19a520;
+        }
+
+        /* Center the Back button */
+        .back-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            li {
+                padding: 20px;
+                font-size: 20px;
+            }
+
+            .back-button {
+                font-size: 16px;
+                padding: 8px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            li {
+                padding: 15px;
+                font-size: 18px;
+            }
+
+            .back-button {
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Date Entries</h1>
         <ul>
-            <li><br>
+            <li>
+                <br>
                 {{range .Dates}}{{.}}<br>{{end}}
             </li>
         </ul>
+        <div class="back-button-container">
+            <button class="back-button" onclick="history.back()">← Back</button>
+        </div>
     </div>
 </body>
 </html>
