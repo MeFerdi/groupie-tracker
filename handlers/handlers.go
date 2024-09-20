@@ -170,7 +170,7 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "cannot unmarshal") {
 			renderError(w, http.StatusNotFound, "Artist not found")
 		} else {
-			renderError(w, http.StatusInternalServerError, "Error fetching artist: "+err.Error())
+			renderError(w, http.StatusNotFound, "Error fetching artist: "+err.Error())
 		}
 		return
 	}
