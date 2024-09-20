@@ -332,7 +332,7 @@ func RelationHandler(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "cannot unmarshal") {
 			renderError(w, http.StatusNotFound, "Relation not found")
 		} else {
-			renderError(w, http.StatusInternalServerError, "Failed to fetch relations data: "+err.Error())
+			renderError(w, http.StatusNotFound, "Failed to fetch relations data: "+err.Error())
 		}
 		return
 	}

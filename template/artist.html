@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{.Name}} - Artist Details</title>
-    
+
     <style>
         body {
             background-color: #1a1a1a;
             color: #fff;
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 40px 20px; /* Reduce padding for better responsiveness */
+            padding: 40px 20px;
+            /* Reduce padding for better responsiveness */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -130,13 +132,21 @@
         }
 
         @media (max-width: 480px) {
+            body {
+               margin: 0px;
+               max-height: fit-content;
+            }
+
             .artist {
                 padding: 20px;
             }
 
             .artist img {
-                width: 200px;
-                height: 200px;
+                height: 190px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
             }
 
             h2 {
@@ -159,54 +169,56 @@
         }
     </style>
 </head>
+
 <body>
     {{if .}}
-        <div class="artist">
-            <img src="{{.Image}}" alt="{{.Name}} Image">
-            <div class="details">
-                <h2>{{.Name}}</h2>
-                <p><strong>Members:</strong></p>
-                <ul class="members-list">
-                    {{range .Members}}
-                        <li>{{.}}</li>
+    <div class="artist">
+        <img src="{{.Image}}" alt="{{.Name}} Image">
+        <div class="details">
+            <h2>{{.Name}}</h2>
+            <p><strong>Members:</strong></p>
+            <ul class="members-list">
+                {{range .Members}}
+                <li>{{.}}</li>
+                {{end}}
+            </ul>
+            <p><strong>Creation Date:</strong> {{.CreationDate}}</p>
+            <p><strong>First Album:</strong> {{.FirstAlbum}}</p>
+
+            <div class="links">
+                <p><strong>Locations:</strong>
+                    {{if .ID}}
+                    <a href="/locations/{{.ID}}">View Locations</a>
+                    {{else}}
+                    N/A
                     {{end}}
-                </ul>
-                <p><strong>Creation Date:</strong> {{.CreationDate}}</p>
-                <p><strong>First Album:</strong> {{.FirstAlbum}}</p>
+                </p>
 
-                <div class="links">
-                    <p><strong>Locations:</strong> 
-                        {{if .ID}}
-                            <a href="/locations/{{.ID}}">View Locations</a>
-                        {{else}}
-                            N/A
-                        {{end}}
-                    </p>
+                <p><strong>Dates:</strong>
+                    {{if .ID}}
+                    <a href="/dates/{{.ID}}">View Dates</a>
+                    {{else}}
+                    N/A
+                    {{end}}
+                </p>
 
-                    <p><strong>Dates:</strong> 
-                        {{if .ID}}
-                            <a href="/dates/{{.ID}}">View Dates</a>
-                        {{else}}
-                            N/A
-                        {{end}}
-                    </p>
-
-                    <p><strong>Relations:</strong> 
-                        {{if .ID}}
-                            <a href="/relation/{{.ID}}">View Relations</a>
-                        {{else}}
-                            N/A
-                        {{end}}
-                    </p>
-                    <div>
-                        <button class="back-button" onclick="history.back()">← Back</button>
-                    </div>
+                <p><strong>Relations:</strong>
+                    {{if .ID}}
+                    <a href="/relation/{{.ID}}">View Relations</a>
+                    {{else}}
+                    N/A
+                    {{end}}
+                </p>
+                <div>
+                    <button class="back-button" onclick="history.back()">← Back</button>
                 </div>
             </div>
         </div>
+    </div>
     {{else}}
-        <p>No artist information found.</p>
+    <p>No artist information found.</p>
     {{end}}
 
 </body>
+
 </html>
