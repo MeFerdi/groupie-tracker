@@ -1,17 +1,12 @@
-# fly.toml app configuration file generated for groupie-tracker-lively-frost-924 on 2024-09-25T21:26:07+03:00
+# fly.toml app configuration file generated for groupie-tracker-little-fog-4144 on 2024-09-25T22:11:14+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'groupie-tracker-lively-frost-924'
+app = 'groupie-tracker-little-fog-4144'
 primary_region = 'jnb'
 
 [build]
-  [build.args]
-    GO_VERSION = '1.18'
-
-[env]
-  PORT = '8080'
 
 [http_service]
   internal_port = 8080
