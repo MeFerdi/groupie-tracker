@@ -4,58 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Date Details</title>
-    
-    <style>
-        body {
-            background-color: #1a1a1a;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            padding: 40px;
-            margin-top: 20px; /* Move content down from the top */
-            width: 80%;
-            max-width: 800px;
-        }
-
-        h1 {
-            color: #2da133;
-            font-size: 48px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            background-color: #333;
-            padding: 30px;
-            margin: 20px 0;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            font-size: 24px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/static/dates.css" />
 </head>
 <body>
     <div class="container">
         <h1>Date Entries</h1>
         <ul>
-            <li><br>
+            <li>
+                <br>
                 {{range .Dates}}{{.}}<br>{{end}}
             </li>
         </ul>
+        <div class="back-button-container">
+            <button class="back-button" onclick="history.back()">← Back</button>
+        </div>
     </div>
 </body>
 </html>

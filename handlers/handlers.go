@@ -10,37 +10,62 @@ import (
 
 var errorTemplate *template.Template
 
+/*
+Init initializes the error template for the application.
+It attempts to parse the error.html template file. If parsing fails,
+it creates a simple fallback template to ensure error rendering.
+This function should be called once at the start of the application.
+*/
 func Init() {
-    var err error
-    errorTemplate, err = template.ParseFiles("template/error.html")
-    if err != nil {
-       // log.Printf("Warning: Error parsing error template: %v", err)
-        // Create a simple fallback template
-        errorTemplate = template.Must(template.New("error").Parse(`
+	var err error
+	errorTemplate, err = template.ParseFiles("template/error.html")
+	if err != nil {
+		// log.Printf("Warning: Error parsing error template: %v", err)
+		// Create a simple fallback template
+		errorTemplate = template.Must(template.New("error").Parse(`
             <html><body>
             <h1>Error {{.Code}}</h1>
             <p>{{.Message}}</p>
             </body></html>
         `))
-      //  log.Println("Error parsing, using fallback template")
-		
-    }
+		//  log.Println("Error parsing, using fallback template")
+	}
 }
 
+/*
+renderError handles the rendering of error pages.
+It sets the HTTP status code, executes the error template with the provided status and message,
+and logs any errors that occur during template execution.
+Parameters:
+  - w: http.ResponseWriter to write the response
+  - status: HTTP status code for the error
+  - message: Error message to display
+*/
 func renderError(w http.ResponseWriter, status int, message string) {
 	Init()
-    w.WriteHeader(status)
-    err := errorTemplate.Execute(w, struct {
-        Code    int
-        Message string
-    }{
-        Code:    status,
-        Message: message,
-    })
-    if err != nil {
-        log.Printf("Error rendering error template: %v", err)
-    }
+	w.WriteHeader(status)
+	err := errorTemplate.Execute(w, struct {
+		Code    int
+		Message string
+	}{
+		Code:    status,
+		Message: message,
+	})
+	if err != nil {
+		log.Printf("Error rendering error template: %v", err)
+	}
 }
+
+/*
+HomeHandler manages requests to the home page of the application.
+It checks if the requested path is the root ("/") and if the HTTP method is GET.
+If these conditions are not met, it renders appropriate error pages.
+Otherwise, it parses and executes the home.html template.
+
+Parameters:
+  - w: http.ResponseWriter to write the response
+  - r: *http.Request containing the request details
+*/
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		renderError(w, http.StatusNotFound, "Page Not Found")
@@ -66,6 +91,16 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*
+ArtistsHandler manages requests to the artists listing page.
+It verifies the correct URL path and HTTP method, then fetches and displays
+the list of artists. If any errors occur during this process, it renders
+appropriate error pages.
+
+Parameters:
+  - w: http.ResponseWriter to write the response
+  - r: *http.Request containing the request details
+*/
 func ArtistsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/artists/" {
 		renderError(w, http.StatusNotFound, "Page Not Found")
@@ -96,6 +131,16 @@ func ArtistsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*
+ArtistHandler manages requests for individual artist pages.
+It checks for the correct HTTP method and URL format, extracts the artist ID
+from the URL, fetches the artist data, and renders it using the artist template.
+If any errors occur during this process, it renders appropriate error pages.
+
+Parameters:
+  - w: http.ResponseWriter to write the response
+  - r: *http.Request containing the request details
+*/
 func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		renderError(w, http.StatusMethodNotAllowed, "Wrong method")
@@ -125,7 +170,7 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "cannot unmarshal") {
 			renderError(w, http.StatusNotFound, "Artist not found")
 		} else {
-			renderError(w, http.StatusInternalServerError, "Error fetching artist: "+err.Error())
+			renderError(w, http.StatusNotFound, "Error fetching artist: "+err.Error())
 		}
 		return
 	}
@@ -141,6 +186,16 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*
+LocationHandler manages requests for location information of artists.
+It verifies the HTTP method, extracts the location ID from the URL,
+fetches the location data, and renders it using the locations template.
+If any errors occur during this process, it renders appropriate error pages.
+
+Parameters:
+  - w: http.ResponseWriter to write the response
+  - r: *http.Request containing the request details
+*/
 func LocationHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		renderError(w, http.StatusMethodNotAllowed, "Wrong method")
@@ -182,6 +237,16 @@ func LocationHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*
+DateHandler manages requests for concert date information of artists.
+It verifies the HTTP method, extracts the artist ID from the URL,
+fetches the date data, and renders it using the dates template.
+If any errors occur during this process, it renders appropriate error pages.
+
+Parameters:
+  - w: http.ResponseWriter to write the response
+  - r: *http.Request containing the request details
+*/
 func DateHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		renderError(w, http.StatusMethodNotAllowed, "Wrong method")
@@ -228,6 +293,16 @@ func DateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*
+RelationHandler manages requests for relation information of artists.
+It verifies the HTTP method, extracts the relation ID from the URL,
+fetches the relation data, and renders it using the relation template.
+If any errors occur during this process, it renders appropriate error pages.
+
+Parameters:
+  - w: http.ResponseWriter to write the response
+  - r: *http.Request containing the request details
+*/
 func RelationHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		renderError(w, http.StatusMethodNotAllowed, "Method not allowed")
@@ -252,12 +327,12 @@ func RelationHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	baseURL := "https://groupietrackers.herokuapp.com/api/relation/"
 
-	relations, err := FetchRelations(baseURL, id)
+	relations, err := ReadRelations(baseURL, id)
 	if err != nil {
 		if strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "cannot unmarshal") {
 			renderError(w, http.StatusNotFound, "Relation not found")
 		} else {
-			renderError(w, http.StatusInternalServerError, "Failed to fetch relations data: "+err.Error())
+			renderError(w, http.StatusNotFound, "Failed to fetch relations data: "+err.Error())
 		}
 		return
 	}
@@ -272,4 +347,3 @@ func RelationHandler(w http.ResponseWriter, r *http.Request) {
 		renderError(w, http.StatusInternalServerError, "Failed to render template: "+err.Error())
 	}
 }
-
