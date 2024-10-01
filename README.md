@@ -25,8 +25,8 @@ To run the project locally follow these steps:
 git clone https://learn.zone01kisumu.ke/git/ferdyodhiambo/groupie-tracker.git
 ```
 
-2. Run the server
-- navigate to the directory
+2. To run the server;
+- navigate to the project directory then:
 ```bash
 cd groupie-tracker
 ``` 
@@ -46,14 +46,23 @@ go run .
 ## Demo project
 ![Demo GIF](images/art.gif)
 
+[Watch the Gif Here!](https://imgur.com/a/A9R65Lm)
+
 
 ## License
 
 This project is licensed under the terms of the [MIT License](./LICENSE).
 Contact Information
 
-For any questions or inquiries, feel free to reach out:
+* For any questions or inquiries, feel free to reach out:
     Email: apikojuma94@gmail.com
+## Contributers
+- [hanapiko](https://github.com/hanapiko)
+
+- [hezronokwach](https://github.com/hezronokwach)
+
+- [MeFerdi](https://github.com/MeFerdi)
+
 
 ## Contribution
 * If you want to contribute to this project, feel free to open issues or pull requests. Any improvements, bug fixes, or features are welcome!
